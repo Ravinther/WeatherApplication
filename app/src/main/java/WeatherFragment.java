@@ -35,14 +35,6 @@ public class WeatherFragment extends Fragment
     public WeatherFragment(){
         handler = new Handler();
     }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        weatherFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/weather.ttf");
-        updateWeatherData(new Citypreference(getActivity()).getCity());
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -56,10 +48,18 @@ public class WeatherFragment extends Fragment
         weatherIcon.setTypeface(weatherFont);
         return rootView;
     }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        weatherFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/weather.ttf");
+        updateWeatherData(new CityPreference(getActivity()).getCity());
+    }
+
     private void updateWeatherData(final String city){
         new Thread(){
             public void run(){
-                final JSONObject json = RemoteFetch.getJSON(getActivity(), city);
+                final JSONObject json = Fetchdata.getJSON(getActivity(), city);
                 if(json == null){
                     handler.post(new Runnable(){
                         public void run(){
